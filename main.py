@@ -2,13 +2,13 @@ import requests
 import os
 from pymongo import MongoClient
 from datetime import datetime, timezone
-
-try :
-    mongo_user = os.getenv('MONGO_USER') 
-    mongo_pass = os.getenv('MONGO_PASS') 
-except KeyError: 
-    mongo_user = 'mattaharimadhav2004' 
-    mongo_pass = 'chQNUDwVPr0Ov5jx'
+# Dummy change to trigger workflow
+# try :
+mongo_user = os.getenv('MONGO_USER') 
+mongo_pass = os.getenv('MONGO_PASS') 
+# except KeyError: 
+#     mongo_user = 'mattaharimadhav2004' 
+#     mongo_pass = 'chQNUDwVPr0Ov5jx'
 
 uri = f"mongodb+srv://{mongo_user}:{mongo_pass}@cluster0.yzrkrnz.mongodb.net/"
 client = MongoClient(uri)
