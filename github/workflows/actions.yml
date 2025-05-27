@@ -1,0 +1,30 @@
+name: Fetch and Store Crypto Data
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour on the hour
+  workflow_dispatch:      # Allows manual run
+
+jobs:
+  fetch-crypto-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install requests pymongo
+
+    - name: Run main.py
+      env:
+        MONGO_USER: ${{ secrets.MONGO_USER }}
+        MONGO_PASS: ${{ secrets.MONGO_PASS }}
+      run: |
+        python main.py
