@@ -2,6 +2,7 @@ import requests
 import os
 from pymongo import MongoClient
 from datetime import datetime, timezone
+import json
 # Dummy change to trigger workflow
 # try :
 mongo_user = os.getenv('MONGO_USER') 
@@ -35,7 +36,13 @@ for coin in coins:
         data = response.json()
         if data:
             coin_data = data[0]
-            coin_data['fetched_at'] = datetime.now(timezone.utc)
+            date_now = datetime.now(timezone.utc).isoformat()
+            with open("data.json", "r") as f:
+                data = json.load(f)
+            data["last_updated"] = date_now
+            with open("data.json", "w") as f:
+                json.dump(data, f, indent=4)
+            coin_data['fetched_at'] = date_now
             collections[coin].insert_one(coin_data)
             print(f"{coin.capitalize()} data inserted successfully.")
         else:
