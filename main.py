@@ -11,7 +11,6 @@ import json
 # except KeyError: 
 mongo_user = 'mattaharimadhav2004' 
 mongo_pass = 'chQNUDwVPr0Ov5jx'
-
 uri = f"mongodb+srv://{mongo_user}:{mongo_pass}@cluster0.yzrkrnz.mongodb.net/"
 client = MongoClient(uri)
 
@@ -21,6 +20,12 @@ collections = {
     'ethereum': db["ethereum"],
     'solana': db["solana"],
     'recent_fetched_at':db["recent_fetched_at"]
+}
+
+id={
+    'bitcoin': "6835e22cd05b8fb12e8d6471",
+    'ethereum': "6835e6f8573a8dbe6b439a25",
+    'solana': "6835e702573a8dbe6b439a26",
 }
 
 # API endpoint
@@ -45,9 +50,10 @@ for coin in coins:
             # with open("data.json", "w") as f:
             #     json.dump(data, f, indent=4)
             collections['recent_fetched_at'].update_one(
-                {"_id": ObjectId("6835e22cd05b8fb12e8d6471")},
+                {"_id": ObjectId(id[coin])},
                 {"$set": {"timestamp": date_now}}
             )
+            print(date_now)
             coin_data['fetched_at'] = date_now
             collections[coin].insert_one(coin_data)
             print(f"{coin.capitalize()} data inserted successfully.")
