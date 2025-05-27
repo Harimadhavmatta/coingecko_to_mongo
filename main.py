@@ -2,14 +2,15 @@ import requests
 import os
 from pymongo import MongoClient
 from datetime import datetime, timezone
+from bson import ObjectId
 import json
 # Dummy change to trigger workflow
 # try :
-mongo_user = os.getenv('MONGO_USER') 
-mongo_pass = os.getenv('MONGO_PASS') 
+# mongo_user = os.getenv('MONGO_USER') 
+# mongo_pass = os.getenv('MONGO_PASS') 
 # except KeyError: 
-#     mongo_user = 'mattaharimadhav2004' 
-#     mongo_pass = 'chQNUDwVPr0Ov5jx'
+mongo_user = 'mattaharimadhav2004' 
+mongo_pass = 'chQNUDwVPr0Ov5jx'
 
 uri = f"mongodb+srv://{mongo_user}:{mongo_pass}@cluster0.yzrkrnz.mongodb.net/"
 client = MongoClient(uri)
@@ -19,6 +20,7 @@ collections = {
     'bitcoin': db["bitcoin"],
     'ethereum': db["ethereum"],
     'solana': db["solana"],
+    'recent_fetched_at':db["recent_fetched_at"]
 }
 
 # API endpoint
@@ -37,11 +39,15 @@ for coin in coins:
         if data:
             coin_data = data[0]
             date_now = datetime.now(timezone.utc).isoformat()
-            with open("data.json", "r") as f:
-                data = json.load(f)
-            data["last_updated"] = date_now
-            with open("data.json", "w") as f:
-                json.dump(data, f, indent=4)
+            # with open("data.json", "r") as f:
+            #     data = json.load(f)
+            # data["last_updated"] = date_now
+            # with open("data.json", "w") as f:
+            #     json.dump(data, f, indent=4)
+            collections['recent_fetched_at'].update_one(
+                {"_id": ObjectId("6835e22cd05b8fb12e8d6471")},
+                {"$set": {"timestamp": date_now}}
+            )
             coin_data['fetched_at'] = date_now
             collections[coin].insert_one(coin_data)
             print(f"{coin.capitalize()} data inserted successfully.")
