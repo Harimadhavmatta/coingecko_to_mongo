@@ -1,7 +1,7 @@
 import requests
 import os
 from pymongo import MongoClient
-from datetime import datetime, UTC  # Updated import for timezone-aware datetime
+from datetime import datetime, timezone
 
 try :
     mongo_user = os.getenv('MONGO_USER') 
@@ -35,7 +35,7 @@ for coin in coins:
         data = response.json()
         if data:
             coin_data = data[0]
-            coin_data['fetched_at'] = datetime.now(UTC)  # Updated to use timezone-aware datetime
+            coin_data['fetched_at'] = datetime.now(timezone.utc)
             collections[coin].insert_one(coin_data)
             print(f"{coin.capitalize()} data inserted successfully.")
         else:
