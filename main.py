@@ -51,10 +51,9 @@ for coin in coins:
                 {"_id": ObjectId(id[coin])},
                 {"$set": {"timestamp": date_now}}
             )
-            print(date_now)
             coin_data['fetched_at'] = date_now
             collections[coin].insert_one(coin_data)
-            print(f"{coin.capitalize()} data inserted successfully.")
+            print(f"{coin.capitalize()} data inserted successfully. at {date_now}")
         else:
             print(f"No data returned for {coin}.")
     else:
